@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>  
+<head>  
+    <title>Uploading & Reading CSV file</title>  
+
+<!--making the back button -->
+<script>
+
+        function goBack() {
+        
+        window.history.back()
+        
+        }
+        
+</script>      
+</head>  
+<body>  
+
+    <button onclick="goBack()">Go Back</button>
+    <br>
+    <br>
+    <p style="color:green;"> File uploaded successfully!! </p>
+    <form action="/show_data" target="_blank" class="form">
+        <div class = center >
+            <input type="submit" value="Show CSV and Predictions" style = "background-color: #8e44ad;
+            border: 2px solid #8e44ad;
+            border-radius: 4px;
+            color: #fff;
+            display: block;
+            font-family: inherit;
+            font-size: 16px;
+            padding: 5px;
+            margin-top: 20px;
+            width: 100%; "/>
+        </div>
+        <div id="csv-error" class="center" style="font-size: 18px; color: black;">
+            {% if error %}
+            <h2> {{ error }}</h2>
+            {% endif %}
+        </div>
+
+
+
+
+
+
+
+  </form>
+</body>  
+</html>

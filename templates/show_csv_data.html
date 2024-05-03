@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--making the back button -->
+<script>
+
+  function goBack() {
+  
+  window.history.back()
+  
+  }
+  
+</script>
+  <!-- end of making the back button -->
+  </head>
+  <body>
+    <button style="font-size: 50px, sans-serif; background-color: rgb(226, 128, 239);"onclick="goBack()">Go Back</button>
+    <br>
+    <br>
+    {{ data_var|safe }}
+    </body>
+</html>
