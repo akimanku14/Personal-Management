@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Starter Template - Materialize</title>
+<!--CSS PART OF PROJECT-->
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,500&display=swap');
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #9b59b6;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  .container {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    width: 1000px;
+    max-width: 100%;
+  }
+  .refresh-button {
+            position: right; /* Position the button relative to the browser window */
+            top: 60px; /* Distance from the top of the window */
+            right: 0px; /* Distance from the right of the window */
+            padding: 10px 20px; /* Example padding */
+            font-size: 10px; /* Example font size */
+            background-color: #f1eaf1; /* Example background color */
+            color: rgb(5, 1, 1); /* Example text color */
+            border-radius: 10px; /* Example border radius */
+            cursor: pointer; /* Change cursor to pointer on hover */
+}
+  .header {
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f7f7f7;
+    padding: 10px 20px;
+  }
+  
+  .header h2 {
+    margin: 0;
+  }
+  
+  .form {
+    padding: 30px 40px;	
+  }
+  
+  .form-control {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    position: relative;
+  }
+  
+  .form-control label {
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  
+  .form-control input {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 5px;
+    width: 100%;
+  }
+  
+  .form-control input:focus {
+    outline: 0;
+    border-color: #777;
+  }
+  
+  .form-control.success input {
+    border-color: #2ecc71;
+  }
+  
+  .form-control.error input {
+    border-color: #e74c3c;
+  }
+  
+  .form-control i {
+    visibility: hidden;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+  }
+  
+  .form-control.success i.fa-check-circle {
+    color: #2ecc71;
+    visibility: visible;
+  }
+  
+  .form-control.error i.fa-exclamation-circle {
+    color: #e74c3c;
+    visibility: visible;
+  }
+  
+  .form-control small {
+    color: #e74c3c;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+  }
+  
+  .form-control.error small {
+    visibility: visible;
+  }
+  
+  .form button {
+    background-color: #8e44ad;
+    border: 2px solid #8e44ad;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    font-family: inherit;
+    font-size: 16px;
+    padding: 5px;
+    margin-top: 20px;
+    width: 100%;
+  }
+  .required::after {
+   content:"*";
+   color: red;
+ }
+    
+  select {
+        width:500px; 
+    }
+    *{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+.download-btn{
+    background-color: rgb(196, 114, 216);
+    color: rgb(2, 0, 0);
+    padding: 2px 20px;
+    font-size: 17px;
+    text-decoration: none;
+    border-radius:2px;
+}
+
+.download-btn:hover {
+    background-color: rgb(196, 114, 216);
+  }
+/* Tooltip container */
+.tooltip {
+  position: relative;
+}
+
+.input-with-symbol {
+  padding-right: 30px; /* Adjust the padding to accommodate the symbol */
+}
+
+.info-symbol {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the right position as needed */
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 300px;
+  background-color: #3b3939;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+</style>
+  
+
+<!--################################################################################-->
+
+<!--HTML PART OF THE PROJECT -->
+
+</head>
+<body>
+  <div class="container">
+    <p><input class="refresh-button" type="button" value="Refresh" onClick="clearForm()"></p>
+    <div class="header">   
+      <h1>Predict who's going to quit your company</h1>
+      <h3><FONT Color="Red">How do you know if the employee is going to quit? Check it with us.</FONT></h3>
+      <h5> All the fields marked in <FONT Color="Red">*</FONT>  are mandatory.</h5>
+    </div>
+    <form id="form" class="form" action='/predict' method="post" >
+      <div class="form-control">
+        <label class = required for="satisfaction">Satisfaction level</label>
+        <div class="tooltip">
+          <input type="text" placeholder="0.9" id="satisfaction" name='satisfaction_level' class="input-symbol" maxlength="10" value="{{ request.form['satisfaction_level'] if request.form.get('satisfaction_level') else '' }}" required pattern  = "/^(0(\.\d+)?|1(\.0+)?)$/"/>
+          <span class="info-symbol">ℹ️</span>
+          <span class="tooltiptext">The level of satisfaction the employee feels with their job.</span>
+        </div>
+        <div class="error-message-satisfaction" style="color: red;"></div>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="evaluation">Last Evaluation</label>
+        <div class="tooltip">
+          <input type="text" placeholder="0.9" id="evaluation" name="last_evaluation" class="input-symbol" maxlength="10" value="{{ request.form['last_evaluation'] if request.form.get('last_evaluation') else '' }}" required pattern = "/^(0(\.\d+)?|1(\.0+)?)$/"/>
+          <span class="info-symbol">ℹ️</span>
+          <span class="tooltiptext">Last evaluation for the employee</span>
+        </div>
+        <div class="error-message-evaluation" style="color: red;"></div>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="month">Average monthly hours</label>
+        <div class="tooltip">
+          <input type="text" placeholder="230" id="month"   name="average_monthly_hours" class="input-symbol" maxlength="10" value="{{ request.form['average_monthly_hours'] if request.form.get('average_monthly_hours') else '' }}" required/>
+          <span class="info-symbol">ℹ️</span>
+          <span class="tooltiptext">The typical number of hours that an employee works for the company.</span>
+        </div>
+        <div class="error-message-month" style="color: red;"></div>
+        <div class="warning-message-month" style="color: orange;"></div>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="projects">Number of projects </label>
+        <div class="tooltip">
+          <input type="text" placeholder="3" id="projects"  name="number_project" class="input-symbol" maxlength="10" value="{{ request.form['number_project'] if request.form.get('number_project') else '' }}" required/>
+          <span class="info-symbol">ℹ️</span>
+          <span class="tooltiptext">The quantity of projects completed by the employee for the company.</span>
+        </div>
+        <div class="error-message-projects" style="color: red;"></div>
+        <div class="warning-message-projects" style="color: orange;"></div>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="time">Time Spend in Company (in years)</label>
+        <div class="tooltip">
+          <input type="text" placeholder="2" id="time"  name="time_spend_company" class="input-symbol" maxlength="10" value="{{ request.form['time_spend_company'] if request.form.get('time_spend_company') else '' }}" required/>
+          <span class="info-symbol">ℹ️</span>
+          <span class="tooltiptext">The duration of time that the employee has been working for the company.</span>
+        </div>
+        <div class="error-message-time" style="color: red;"></div>
+        <div class="warning-message-time" style="color: orange;"></div>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="work">Work Accident</b></label>
+        <div class="tooltip">ℹ️
+          <span class="tooltiptext">If the employee experienced any accidents on the workplace.</span>
+        </div>
+        <select name="work_accident" id="first_name"  required>
+          <option disabled selected value="">Select one</b></option>
+          <option value="0" {% if request.form['work_accident'] == '0' %} selected {% endif %}>False</option>
+          <option value="1" {% if request.form['work_accident'] == '1' %} selected {% endif %}>True</option>
+        </select>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="promotion">Promotion Last Years</label>
+        <div class="tooltip">ℹ️
+          <span class="tooltiptext">The employee's promotion status within last 5 years.</span>
+        </div>
+        <select name="promotion_last_years" id="promotion" required>
+          <option disabled selected value="">Select one</option>
+          <option value="0" {% if request.form['promotion_last_years'] == '0' %} selected {% endif %}>False</option>
+          <option value="1" {% if request.form['promotion_last_years'] == '1' %} selected {% endif %}>True</option>
+      </select>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="Deparment">Department</label>
+        <div class="tooltip">ℹ️
+          <span class="tooltiptext">The department where the employer is employed.</span>
+        </div>
+        <select id="Department" name="department" required>
+          <option disabled selected value="">Select Department</option>
+          <option value="RandD" {% if request.form['department'] == 'RandD' %} selected {% endif %}>RandD</option>
+          <option value="accounting" {% if request.form['department'] == 'accounting' %} selected {% endif %}>Accounting</option>
+          <option value="hr" {% if request.form['department'] == 'hr' %} selected {% endif %}>HR</option>
+          <option value="management" {% if request.form['department'] == 'management' %} selected {% endif %}>Management</option>
+          <option value="marketing" {% if request.form['department'] == 'marketing' %} selected {% endif %}>Marketing</option>
+          <option value="product_mng" {% if request.form['department'] == 'product_mng' %} selected {% endif %}>Product_mng</option>
+          <option value="sales" {% if request.form['department'] == 'sales' %} selected {% endif %}>Sales</option>
+          <option value="support" {% if request.form['department'] == 'support' %} selected {% endif %}>Support</option>
+          <option value="technical" {% if request.form['department'] == 'technical' %} selected {% endif %}>Technical</option>
+          <option value="IT" {% if request.form['department'] == 'IT' %} selected {% endif %}>IT</option>
+      </select>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+      <div class="form-control">
+        <label  class = required for="salary">Salary</label>
+        <div class="tooltip">ℹ️
+          <span class="tooltiptext">The salary amount received by the employee from the company.</span>
+        </div>
+        <select name="salary" id="salary" required>
+          <option disabled selected value="">Select Salary</option>
+          <option value="low" {% if request.form['salary'] == 'low' %} selected {% endif %}>Low</option>
+          <option value="medium" {% if request.form['salary'] == 'medium' %} selected {% endif %}>Medium</option>
+          <option value="high" {% if request.form['salary'] == 'high' %} selected {% endif %}>High</option>
+      </select>
+        <i class="fas fa-check-circle"></i>
+        <i class="fas fa-exclamation-circle"></i>
+        <small>Error message</small>
+      </div>
+    
+      <div class="row center">
+        <button type='submit'>Predict Here!</button>
+      </div>
+      <div id="prediction-result" class="row center" style="font-size: 18px; color: black;">
+        {% if pred %}
+        <h2>Prediction Result: {{ pred }}</h2>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_empty_feilds %}
+        <h4>Error : {{ error_empty_feilds }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_satisfaction_level %}
+        <h4>Error : {{ error_satisfaction_level }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_last_evaluation %}
+        <h4>Error : {{ error_last_evaluation }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_number_project %}
+        <h4>Error : {{ error_number_project }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_average_monthly_hours %}
+        <h4>Error : {{ error_average_monthly_hours }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_time_spend_company %}
+        <h4>Error : {{ error_time_spend_company }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_work_accident %}
+        <h4>Error : {{ error_work_accident }}</h4>
+        {% endif %}
+      </div>
+      <div id="input-error" class="row center">
+        {% if error_promotion_last_years %}
+        <h4>Error : {{ error_promotion_last_years }}</h4>
+        {% endif %}
+      </form>
+    </div>
+    <form method = "POST" enctype="multipart/form-data" class="form" action = "/">   
+      <p style="color:black;"> Or You can choose a csv file to upload for multiple predictions</p> 
+      <input type="file" name="file" accept=".csv" style="font-size: 16px; padding: 10px 20px; border: 2px solid #ccc; border-radius: 5px;">
+      <input type = "submit" value = "Upload" style="font-size: 16px; padding: 10px 20px; border: 2px solid #ccc; border-radius: 5px;">
+      <br>
+      <br>
+      <p style="color:black;"> You can download a template here for your csv file</p> 
+      <a href = "{{url_for('download_file')}}"><Font color= green >Download </Font></a>
+    </form>
+  </div>
+</div>
+
+   
+
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src=".js/materialize.js"></script>
+<script src="js/init.js"></script>
+<!--Javascript code for the project-->
+<!-- Fatemeh code-->
+<script>
+
+      
+
+
+  $(document).ready(function(){
+    $('#satisfaction').on('input', function() {
+      var val = $(this).val();  //Remove whitespace
+      var isValid = /^(0(\.\d+)?|1(\.0+)?)$/.test(val);
+      if (val.trim() === "") { // Check if the input value is empty
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-satisfaction').text('This is a required field');
+      }
+      else if  (isValid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $('.error-message-satisfaction').text('');
+      } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-satisfaction').text('Please insert any float number between 0 & 1 with dot(.) sign');
+      }
+    });
+  });
+  $(document).ready(function(){
+    $('#evaluation').on('input', function() {
+      var val1 = $(this).val();
+      var isValid = /^(0(\.\d+)?|1(\.0+)?)$/.test(val1);
+      if (val1.trim() === "") { // Check if the input value is empty
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-evaluation').text('This is a required field');
+      }
+      else if (isValid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $('.error-message-evaluation').text('');
+      } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-evaluation').text('Please insert any float number between 0 & 1 with dot(.) sign');
+      }
+    });
+  });
+  $(document).ready(function(){
+    $('#month').on('input', function() {
+      var val2 = $(this).val();
+      var isValid = /[0-9]+/.test(val2);
+      if (val2.trim() === "") { // Check if the input value is empty
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-month').text('This is a required field');
+      }
+      else if (isValid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $('.error-message-month').text('');
+      } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-month').text('Strings are not accepted, please write numbers');
+      }
+    });
+  });
+  $(document).ready(function(){
+    $('#projects').on('input', function() {
+      var val3 = $(this).val();
+      var isValid = /[0-9]+/.test(val3);
+      if (val3.trim() === "") { // Check if the input value is empty
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-projects').text('This is a required field');
+      }
+      else if (isValid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $('.error-message-projects').text('');
+      } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-projects').text('Strings and floating point numbers are not accepted, please write numbers');
+      }
+    });
+  });
+  $(document).ready(function(){
+    $('#time').on('input', function() {
+      var val4 = $(this).val();
+      var isValid = /[0-9]+/.test(val4);
+      if (val4.trim() === "") { // Check if the input value is empty
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-time').text('This is a required field');
+      }
+      else if (isValid) {
+        $(this).removeClass('invalid').addClass('valid');
+        $('.error-message-time').text('');
+      } else {
+        $(this).removeClass('valid').addClass('invalid');
+        $('.error-message-time').text('Strings and floating point numbers are not accepted, please write numbers');
+      }
+    });
+  });
+  
+
+
+    $(document).ready(function(){
+      $('#month').on('input', function() {
+        var val2 = $(this).val();
+        var isValid = /^\d+$/.test(val2);
+        
+        // Check if the input value is empty
+        if (val2.trim() === "") {
+          $(this).removeClass('valid warning'); // Remove both classes
+          $('.warning-message-month').text(''); // Clear the warning message
+        }
+        // Check if the input is within the valid range
+        else if (isValid && val2 >= 96 && val2 <= 310) { 
+          $(this).removeClass('warning').addClass('valid');
+          $('.warning-message-month').text('');
+        } 
+        // Display warning if the input is not within the valid range
+        else {
+          $(this).removeClass('valid').addClass('warning');
+          $('.warning-message-month').text('Warning: The database data ranges from 96 to 310');
+        }
+      });
+  });
+
+  $(document).ready(function(){
+      $('#projects').on('input', function() {
+        var val2 = $(this).val();
+        var isValid = /^\d+$/.test(val2);
+        
+        // Check if the input value is empty
+        if (val2.trim() === "") {
+          $(this).removeClass('valid warning'); // Remove both classes
+          $('.warning-message-projects').text(''); // Clear the warning message
+        }
+        // Check if the input is within the valid range
+        else if (isValid && val2 >= 2 && val2 <= 7) { 
+          $(this).removeClass('warning').addClass('valid');
+          $('.warning-message-projects').text('');
+        } 
+        // Display warning if the input is not within the valid range
+        else {
+          $(this).removeClass('valid').addClass('warning');
+          $('.warning-message-projects').text('Warning: The database data ranges from 2 to 7');
+        }
+      });
+  });
+
+  $(document).ready(function(){
+      $('#time').on('input', function() {
+        var val2 = $(this).val();
+        var isValid = /^\d+$/.test(val2);
+        
+        // Check if the input value is empty
+        if (val2.trim() === "") {
+          $(this).removeClass('valid warning'); // Remove both classes
+          $('.warning-message-time').text(''); // Clear the warning message
+        }
+        // Check if the input is within the valid range
+        else if (isValid && val2 >= 2 && val2 <= 10) { 
+          $(this).removeClass('warning').addClass('valid');
+          $('.warning-message-time').text('');
+        } 
+        // Display warning if the input is not within the valid range
+        else {
+          $(this).removeClass('valid').addClass('warning');
+          $('.warning-message-time').text('Warning: The database data ranges from 2 to 10');
+        }
+      });
+  });
+  setTimeout(function() {
+      var predictionResult = document.getElementById('prediction-result');
+      if (predictionResult) {
+        predictionResult.style.display = 'none';
+      }
+    }, 20000); 
+    function clearForm() {
+      document.getElementById("evaluation").value = "";
+      document.getElementById("month").value = "";
+      document.getElementById("projects").value = "";
+      document.getElementById("satisfaction").value = "";
+      document.getElementById("time").value = "";
+      document.getElementById("month").value = "";
+      document.getElementById("first_name").selectedIndex = -1; 
+      document.getElementById("promotion").selectedIndex = -1; 
+      document.getElementById("Department").selectedIndex = -1; 
+      document.getElementById("salary").selectedIndex = -1;
+      document.getElementById("prediction-result").style.display = "none";
+      document.getElementById("input-error").style.display = "none";
+    };
+  </script>
+
+
+
+<!--My code for handling errors -->
+<!--<script>
+const form = document.getElementById('form');
+const satisfaction = document.getElementById('satisfaction');
+const evaluation= document.getElementById('evaluation');
+const month = document.getElementById('month');
+const projects = document.getElementById('projects');
+const time = document.getElementById('time');
+
+form.addEventListener('submit', e => {
+	e.preventDefault();
+	
+	checkInputs();
+});
+
+function checkInputs() {
+	// trim to remove the whitespaces
+	const satisfactionValue = satisfaction.value.trim();
+	const evaluationValue = evaluation.value.trim();
+	const monthValue = month.value.trim();
+	const projectsValue = projects.value.trim();
+  const timeValue = time.value;
+	
+	if(satisfactionValue === '') {
+		setErrorFor(satisfaction, 'Satisfaction cannot be blank');
+	} else if (!isfloatingpoint(satisfaction)) {
+		setErrorFor(satisfaction, 'Not a valid satisfaction number: As specified add a number between 0 and 1');
+    } else {
+		setSuccessFor(satisfaction);
+	}
+	
+	if(evaluationValue === '') {
+		setErrorFor(evaluation, 'Evaluation cannot be blank');
+	} else if (!isfloatingpoint1(evaluation)) {
+		setErrorFor(evaluation, 'Not a valid Last evaluation: As specified add a number between 0 and 1');}
+  else {
+		setSuccessFor(evaluation);
+	}
+	
+	if(monthValue === '') {
+		setErrorFor(month, 'Average monthly hours cannot be left blank');
+	} else if (!isfloatingpoint1(evaluation)) {
+		setErrorFor(evaluation, 'Not a valid Last evaluation: As specified add a number between 0 and 1');}
+  else {
+		setSuccessFor(month);
+	}
+
+  if(projectsValue === '') {
+		setErrorFor(projects, 'Number of projects cannot be left blank');
+	} else if (projects.length>3) {
+		setErrorFor(projects, 'We are sorry you cannot add number of projects of length more than 3');}
+  else {
+		setSuccessFor(projects);
+	}
+
+  if(timeValue === '') {
+		setErrorFor(time, 'Time spend in company cannot be left blank');
+	} else if (time.length>3) {
+		setErrorFor(time, 'We are sorry you cannot add time spend of length more than 3');}
+  else {
+		setSuccessFor(month);
+	}
+	
+}
+
+function setErrorFor(input, message) {
+	const formControl = input.parentElement;
+	const small = formControl.querySelector('small');
+	formControl.className = 'form-control error';
+	small.innerText = message;
+}
+
+function setSuccessFor(input) {
+	const formControl = input.parentElement;
+	formControl.className = 'form-control success';
+}
+	
+function isfloatingpoint(satisfaction){
+	return /^(0(\.\d+)?|1(\.0+)?)$/.test(satisfaction);
+}
+function isfloatingpoint1(evaluation){
+	return /^(0(\.\d+)?|1(\.0+)?)$/.test(evaluation);
+}
+
+
+// SOCIAL PANEL JS
+const floating_btn = document.querySelector('.floating-btn');
+const close_btn = document.querySelector('.close-btn');
+const social_panel_container = document.querySelector('.social-panel-container');
+
+floating_btn.addEventListener('click', () => {
+	social_panel_container.classList.toggle('visible')
+});
+
+close_btn.addEventListener('click', () => {
+	social_panel_container.classList.remove('visible')
+});
+
+</script>-->
+</body>  
+  

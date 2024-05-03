@@ -1,0 +1,9 @@
+# system requirements
+# Usage: pip install -r requirements.txt
+
+# Base ------------------------------------------------------------------------
+ipykernel
+pandas
+seaborn
+scikit-learn
+torch==2.2.2
